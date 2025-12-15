@@ -1,0 +1,61 @@
+# Cash Quality & Balance Sheet Strength - Konfiguracja modelu
+
+nazwa: "Cash Quality & Balance Sheet"
+opis: "Spółki z wysoką jakością zysków (cash conversion) i solidnym bilansem"
+aktywny: true
+
+dane: "biznesradar_cq.txt"
+
+wagi:
+  cash_quality: 0.30    # Jakość zysków (udział w przepływach)
+  balance_sheet: 0.25   # Solidność bilansu
+  profitability: 0.25   # Rentowność
+  value: 0.20           # Wycena
+
+wymagane_kolumny:
+  - Ticker
+  - ROE
+  - ROA
+  - P_E
+
+# Parametry scoringu
+scoring:
+  # Cash Quality
+  cash_conversion_excellent: 100   # Powyżej = max score
+  cash_conversion_good: 50         # 50-100% = dobry
+  cash_conversion_warning: 0       # Poniżej 0 = ostrzeżenie
+  
+  # Balance Sheet
+  debt_safe: 0.30                  # Poniżej = bezpieczne
+  debt_warning: 0.50               # Powyżej = ostrzeżenie
+  liquidity_excellent: 3.0         # Powyżej = świetna płynność
+  liquidity_good: 1.5              # 1.5-3.0 = dobra
+  coverage_excellent: 3.0          # I stopień pokrycia > 3 = świetnie
+  
+  # Profitability
+  roe_excellent: 25                # ROE > 25% = świetny biznes
+  roa_excellent: 15                # ROA > 15% = efektywne aktywa
+  margin_excellent: 20             # Marża > 20% = pricing power
+
+flagi:
+  C:
+    nazwa: "Cash King"
+    warunek: "Udział zysku w przepływach > 100%"
+  B:
+    nazwa: "Strong Balance"
+    warunek: "Debt < 0.25 i Płynność > 3"
+  Q:
+    nazwa: "Quality"
+    warunek: "ROE > 25% i ROA > 15%"
+  V:
+    nazwa: "Value"
+    warunek: "P/E < 10"
+  L:
+    nazwa: "Liquid"
+    warunek: "Płynność bieżąca > 5"
+  "!":
+    nazwa: "Warning - Low Cash"
+    warunek: "Udział zysku w przepływach < 20%"
+  "?":
+    nazwa: "Verify - Extreme"
+    warunek: "Udział zysku w przepływach > 200%"

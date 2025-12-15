@@ -2,7 +2,7 @@
 
 ## Status projektu
 
-**Wersja:** 1.0  
+**Wersja:** 1.1  
 **Ostatnia aktualizacja:** 2025-12-15
 
 ---
@@ -37,7 +37,29 @@
 
 ---
 
-## 🔨 Do zrobienia (v1.1)
+## ✅ Zrobione (v1.1)
+
+### Nowy model
+- [x] **Cash Quality & Balance Sheet** - jakość zysków (cash conversion) + solidny bilans
+  - [x] config.yaml
+  - [x] model.py
+  - [x] README.md
+  - [x] Dane: biznesradar_cq.txt
+
+### Aktualizacje base.py
+- [x] Mapowanie nagłówków dla Cash Quality:
+  - `Udział zysku netto w przepływach operacyjnych r/r` → `Cash_Conv`
+  - `I stopień pokrycia` → `Coverage_I`
+  - `Płynność bieżąca` → `Current_Ratio`
+- [x] Dodanie nowych kolumn do konwersji (procentowe/numeryczne)
+
+### Dokumentacja
+- [x] Aktualizacja głównego README.md
+- [x] Aktualizacja TODO.md
+
+---
+
+## 🔨 Do zrobienia (v1.2)
 
 ### Wysoki priorytet
 
@@ -146,6 +168,15 @@
 ---
 
 ## 🔖 Changelog
+
+### v1.1 (2025-12-15)
+- **NOWY MODEL:** Cash Quality & Balance Sheet
+  - Jakość zysków (cash conversion)
+  - Solidność bilansu (zadłużenie, płynność, pokrycie)
+  - Rentowność (ROE, ROA, marża)
+  - Wycena (P/E)
+- Aktualizacja base.py o nowe mapowania nagłówków
+- Aktualizacja dokumentacji
 
 ### v1.0 (2025-12-15)
 - Pierwsza wersja

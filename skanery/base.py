@@ -94,6 +94,24 @@ def map_header(h: str) -> str:
     if 'profil' in h_lower:
         return 'Ticker'
     
+    # === NOWE MAPOWANIA DLA CASH QUALITY ===
+    
+    # Udział zysku netto w przepływach operacyjnych r/r -> Cash_Conv
+    if 'udzia' in h_lower and 'zysk' in h_lower and 'przep' in h_lower:
+        return 'Cash_Conv'
+    
+    # I stopień pokrycia -> Coverage_I
+    if 'stopie' in h_lower and 'pokrycia' in h_lower:
+        return 'Coverage_I'
+    if h_lower == 'i stopień pokrycia':
+        return 'Coverage_I'
+    
+    # Płynność bieżąca -> Current_Ratio
+    if 'p' in h_lower and 'ynno' in h_lower and 'bie' in h_lower:
+        return 'Current_Ratio'
+    if 'płynność bieżąca' in h_lower:
+        return 'Current_Ratio'
+    
     return h
 
 
@@ -168,13 +186,15 @@ def load_data(filepath: str) -> Optional[pd.DataFrame]:
     # Konwersja kolumn procentowych
     percent_cols = ['ROE', 'ROA', 'ROE_QQ', 'ROE_YY', 'ROA_QQ', 'ROA_YY', 
                     'Margin_QQ', 'Margin_YY', 'EBIT_3Y', 'Rev_3Y',
-                    'Rev_QQ', 'Rev_O4K', 'OpMargin']
+                    'Rev_QQ', 'Rev_O4K', 'OpMargin',
+                    'Cash_Conv']  # NOWA KOLUMNA
     for col in percent_cols:
         if col in df.columns:
             df[col] = df[col].apply(parse_percent)
     
     # Konwersja kolumn numerycznych
-    numeric_cols = ['P_EBIT', 'P_E', 'P_BV', 'Debt_Ratio', 'Asset_Coverage']
+    numeric_cols = ['P_EBIT', 'P_E', 'P_BV', 'Debt_Ratio', 'Asset_Coverage',
+                    'Coverage_I', 'Current_Ratio']  # NOWE KOLUMNY
     for col in numeric_cols:
         if col in df.columns:
             df[col] = df[col].apply(lambda x: parse_percent(x) if pd.notna(x) else 0)

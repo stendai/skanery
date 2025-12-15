@@ -22,7 +22,8 @@ gpw_screener/
 │
 ├── dane/                  # Dane wejściowe (z BiznesRadar)
 │   ├── biznesradar_qg.txt # Dane dla Quality Growth / Turnaround
-│   └── biznesradar_rms.txt # Dane dla Revenue Momentum
+│   ├── biznesradar_rms.txt # Dane dla Revenue Momentum
+│   └── biznesradar_cq.txt # Dane dla Cash Quality
 │
 ├── skanery/               # Modele screeningowe
 │   ├── base.py            # Bazowa klasa + funkcje wspólne
@@ -31,7 +32,8 @@ gpw_screener/
 │   │   ├── config.yaml
 │   │   └── README.md
 │   ├── turnaround/        # Model Turnaround
-│   └── revenue_momentum/  # Model Revenue Momentum
+│   ├── revenue_momentum/  # Model Revenue Momentum
+│   └── cash_quality/      # Model Cash Quality & Balance Sheet
 │
 ├── main/                  # Wyniki
 │   ├── wyniki_latest.xlsx # Najnowsze wyniki
@@ -48,6 +50,7 @@ gpw_screener/
 | **Quality Growth** | Spółki z powtarzalnym wzrostem EBIT | Buffett, Lynch |
 | **Turnaround** | Zbite spółki z dobrymi fundamentami | Graham, Contrarian |
 | **Revenue Momentum** | Momentum + Bezpieczeństwo + GARP | O'Neil, Piotroski |
+| **Cash Quality** | Jakość zysków + solidny bilans | Piotroski, Accrual Anomaly |
 
 ## Użycie
 
@@ -143,6 +146,15 @@ Dane pobierane z BiznesRadar.pl - skopiuj tabelę (Ctrl+C) i wklej do pliku .txt
 - Pokrycie aktywów trwałych
 - Marża zysku operacyjnego
 
+**Cash Quality:**
+- ROE, ROA
+- Udział zysku netto w przepływach operacyjnych r/r
+- Zadłużenie ogólne
+- I stopień pokrycia
+- Płynność bieżąca
+- Marża zysku operacyjnego
+- Cena/Zysk
+
 ## Wyniki
 
 Wyniki zapisywane są w `main/`:
@@ -156,6 +168,7 @@ Wyniki zapisywane są w `main/`:
 2. **Quality Growth** - pełne wyniki modelu
 3. **Turnaround** - pełne wyniki modelu
 4. **Revenue Momentum** - pełne wyniki modelu
+5. **Cash Quality** - pełne wyniki modelu
 
 ### Kolorowanie
 
@@ -166,17 +179,20 @@ Wyniki zapisywane są w `main/`:
 
 Każdy model definiuje własne flagi sygnalizujące kluczowe cechy:
 
-| Flaga | Znaczenie |
-|-------|-----------|
-| `[Q]` | High Quality |
-| `[G]` | Growth |
-| `[V]` | Value |
-| `[M]` | Momentum |
-| `[S]` | Safe |
-| `[D]` | Deep Value |
-| `[A]` | Acceleration |
-| `[!]` | Warning |
-| `[?]` | Verify |
+| Flaga | Znaczenie | Modele |
+|-------|-----------|--------|
+| `[Q]` | High Quality | QG, TA, CQ |
+| `[G]` | Growth | QG, RM |
+| `[V]` | Value | QG, RM, CQ |
+| `[M]` | Momentum | RM |
+| `[S]` | Safe | RM, TA |
+| `[D]` | Deep Value | TA |
+| `[A]` | Acceleration | RM |
+| `[C]` | Cash King | CQ |
+| `[B]` | Strong Balance | CQ |
+| `[L]` | Liquid | CQ |
+| `[!]` | Warning | RM, CQ |
+| `[?]` | Verify | QG, RM, CQ |
 
 ## Wymagania
 
