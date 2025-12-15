@@ -23,7 +23,8 @@ gpw_screener/
 ├── dane/                  # Dane wejściowe (z BiznesRadar)
 │   ├── biznesradar_qg.txt # Dane dla Quality Growth / Turnaround
 │   ├── biznesradar_rms.txt # Dane dla Revenue Momentum
-│   └── biznesradar_cq.txt # Dane dla Cash Quality
+│   ├── biznesradar_cq.txt # Dane dla Cash Quality
+│   └── biznesradar_qm.txt # Dane dla Quality Momentum
 │
 ├── skanery/               # Modele screeningowe
 │   ├── base.py            # Bazowa klasa + funkcje wspólne
@@ -33,7 +34,8 @@ gpw_screener/
 │   │   └── README.md
 │   ├── turnaround/        # Model Turnaround
 │   ├── revenue_momentum/  # Model Revenue Momentum
-│   └── cash_quality/      # Model Cash Quality & Balance Sheet
+│   ├── cash_quality/      # Model Cash Quality & Balance Sheet
+│   └── quality_momentum/  # Model Quality Momentum
 │
 ├── main/                  # Wyniki
 │   ├── wyniki_latest.xlsx # Najnowsze wyniki
@@ -51,6 +53,7 @@ gpw_screener/
 | **Turnaround** | Zbite spółki z dobrymi fundamentami | Graham, Contrarian |
 | **Revenue Momentum** | Momentum + Bezpieczeństwo + GARP | O'Neil, Piotroski |
 | **Cash Quality** | Jakość zysków + solidny bilans | Piotroski, Accrual Anomaly |
+| **Quality Momentum** | Stabilna poprawa wyników (nie jednorazowe skoki) | Momentum Factor, Mean Reversion |
 
 ## Użycie
 
@@ -155,6 +158,14 @@ Dane pobierane z BiznesRadar.pl - skopiuj tabelę (Ctrl+C) i wklej do pliku .txt
 - Marża zysku operacyjnego
 - Cena/Zysk
 
+**Quality Momentum:**
+- ROE k/k, ROE r/r
+- ROA k/k, ROA r/r
+- Przychody ze sprzedaży kwart k/k, r/r
+- Marża zysku operacyjnego k/k, r/r
+- Marża zysku netto k/k, r/r
+- Cena/Zysk
+
 ## Wyniki
 
 Wyniki zapisywane są w `main/`:
@@ -169,6 +180,7 @@ Wyniki zapisywane są w `main/`:
 3. **Turnaround** - pełne wyniki modelu
 4. **Revenue Momentum** - pełne wyniki modelu
 5. **Cash Quality** - pełne wyniki modelu
+6. **Quality Momentum** - pełne wyniki modelu
 
 ### Kolorowanie
 
@@ -181,18 +193,19 @@ Każdy model definiuje własne flagi sygnalizujące kluczowe cechy:
 
 | Flaga | Znaczenie | Modele |
 |-------|-----------|--------|
-| `[Q]` | High Quality | QG, TA, CQ |
+| `[Q]` | High Quality / Quality Momentum | QG, TA, CQ, QM |
 | `[G]` | Growth | QG, RM |
-| `[V]` | Value | QG, RM, CQ |
-| `[M]` | Momentum | RM |
+| `[V]` | Value | QG, RM, CQ, QM |
+| `[M]` | Momentum / Margin Expansion | RM, QM |
 | `[S]` | Safe | RM, TA |
 | `[D]` | Deep Value | TA |
-| `[A]` | Acceleration | RM |
+| `[A]` | Acceleration | RM, QM |
+| `[R]` | Revenue Support | QG, QM |
 | `[C]` | Cash King | CQ |
 | `[B]` | Strong Balance | CQ |
 | `[L]` | Liquid | CQ |
-| `[!]` | Warning | RM, CQ |
-| `[?]` | Verify | QG, RM, CQ |
+| `[!]` | Warning | RM, CQ, QM |
+| `[?]` | Verify | QG, RM, CQ, QM |
 
 ## Wymagania
 

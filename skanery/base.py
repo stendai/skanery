@@ -67,12 +67,40 @@ def map_header(h: str) -> str:
         return 'ROA_QQ'
     if 'roa' in h_lower and 'r/r' in h_lower:
         return 'ROA_YY'
+    
+    # === MAPOWANIA DLA QUALITY MOMENTUM ===
+    
+    # Marża zysku operacyjnego k/k -> Margin_Op_QQ
     if 'mar' in h_lower and 'operacyj' in h_lower and 'k/k' in h_lower:
-        return 'Margin_QQ'
+        return 'Margin_Op_QQ'
+    # Marża zysku operacyjnego r/r -> Margin_Op_YY
     if 'mar' in h_lower and 'operacyj' in h_lower and 'r/r' in h_lower:
-        return 'Margin_YY'
-    if 'mar' in h_lower and 'operacyj' in h_lower:
+        return 'Margin_Op_YY'
+    # Marża zysku netto k/k -> Margin_Net_QQ
+    if 'mar' in h_lower and 'netto' in h_lower and 'k/k' in h_lower:
+        return 'Margin_Net_QQ'
+    # Marża zysku netto r/r -> Margin_Net_YY
+    if 'mar' in h_lower and 'netto' in h_lower and 'r/r' in h_lower:
+        return 'Margin_Net_YY'
+    
+    # Przychody kwart k/k -> Rev_QQ
+    if 'przychody' in h_lower and 'kwart' in h_lower and 'k/k' in h_lower:
+        return 'Rev_QQ'
+    # Przychody kwart r/r -> Rev_YY
+    if 'przychody' in h_lower and 'kwart' in h_lower and 'r/r' in h_lower:
+        return 'Rev_YY'
+    
+    # === STARE MAPOWANIA (dla innych modeli) ===
+    
+    # Starsze mapowanie marży (bez netto/operacyjna distinction)
+    if 'mar' in h_lower and 'operacyj' in h_lower and 'k/k' not in h_lower and 'r/r' not in h_lower:
         return 'OpMargin'
+    # Compatibility: stare Margin_QQ/YY dla innych modeli
+    if 'mar' in h_lower and 'k/k' in h_lower and 'operacyj' not in h_lower and 'netto' not in h_lower:
+        return 'Margin_QQ'
+    if 'mar' in h_lower and 'r/r' in h_lower and 'operacyj' not in h_lower and 'netto' not in h_lower:
+        return 'Margin_YY'
+    
     if 'cena' in h_lower and 'operacyj' in h_lower:
         return 'P_EBIT'
     if 'cena' in h_lower and 'zysk' in h_lower and 'operacyj' not in h_lower and 'ksi' not in h_lower:
@@ -83,8 +111,6 @@ def map_header(h: str) -> str:
         return 'EBIT_3Y'
     if 'przychody' in h_lower and 'dynamika' in h_lower and '3 lat' in h_lower:
         return 'Rev_3Y'
-    if 'przychody' in h_lower and 'kwart' in h_lower:
-        return 'Rev_QQ'
     if 'przychody' in h_lower and 'o4k' in h_lower:
         return 'Rev_O4K'
     if 'zad' in h_lower and 'og' in h_lower:
@@ -94,7 +120,7 @@ def map_header(h: str) -> str:
     if 'profil' in h_lower:
         return 'Ticker'
     
-    # === NOWE MAPOWANIA DLA CASH QUALITY ===
+    # === MAPOWANIA DLA CASH QUALITY ===
     
     # Udział zysku netto w przepływach operacyjnych r/r -> Cash_Conv
     if 'udzia' in h_lower and 'zysk' in h_lower and 'przep' in h_lower:
@@ -134,7 +160,7 @@ def load_data(filepath: str) -> Optional[pd.DataFrame]:
         if not line:
             continue
         
-        if 'Profil' in line and ('ROE' in line or 'Cena' in line):
+        if 'Profil' in line and ('ROE' in line or 'Cena' in line or 'ROA' in line):
             if header_line is None:
                 header_line = line
             continue
@@ -158,7 +184,7 @@ def load_data(filepath: str) -> Optional[pd.DataFrame]:
     rows = []
     for line in data_lines:
         parts = line.split('\t')
-        if len(parts) < 8:
+        if len(parts) < 5:
             continue
         
         row = {}
@@ -169,10 +195,6 @@ def load_data(filepath: str) -> Optional[pd.DataFrame]:
         
         row['Ticker'] = parse_ticker(row.get('Ticker', ''))
         if not row['Ticker']:
-            continue
-        
-        roe_val = row.get('ROE', '')
-        if isinstance(roe_val, str) and '%' not in roe_val and not re.match(r'^[\d\.\,\-\+]+$', roe_val.strip()):
             continue
         
         rows.append(row)
@@ -187,14 +209,17 @@ def load_data(filepath: str) -> Optional[pd.DataFrame]:
     percent_cols = ['ROE', 'ROA', 'ROE_QQ', 'ROE_YY', 'ROA_QQ', 'ROA_YY', 
                     'Margin_QQ', 'Margin_YY', 'EBIT_3Y', 'Rev_3Y',
                     'Rev_QQ', 'Rev_O4K', 'OpMargin',
-                    'Cash_Conv']  # NOWA KOLUMNA
+                    'Cash_Conv',
+                    # Nowe dla Quality Momentum
+                    'Margin_Op_QQ', 'Margin_Op_YY', 'Margin_Net_QQ', 'Margin_Net_YY',
+                    'Rev_YY']
     for col in percent_cols:
         if col in df.columns:
             df[col] = df[col].apply(parse_percent)
     
     # Konwersja kolumn numerycznych
     numeric_cols = ['P_EBIT', 'P_E', 'P_BV', 'Debt_Ratio', 'Asset_Coverage',
-                    'Coverage_I', 'Current_Ratio']  # NOWE KOLUMNY
+                    'Coverage_I', 'Current_Ratio']
     for col in numeric_cols:
         if col in df.columns:
             df[col] = df[col].apply(lambda x: parse_percent(x) if pd.notna(x) else 0)

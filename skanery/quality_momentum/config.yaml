@@ -1,0 +1,72 @@
+# Quality Momentum - Konfiguracja modelu
+
+nazwa: "Quality Momentum"
+opis: "Spółki z systematyczną, stabilną poprawą wyników (nie jednorazowe skoki)"
+aktywny: true
+
+dane: "biznesradar_qm.txt"
+
+wagi:
+  profitability_momentum: 0.30   # ROE r/r + ROA r/r
+  margin_momentum: 0.25          # Marża operacyjna r/r + Marża netto r/r
+  trend_confirmation: 0.20       # Czy k/k potwierdza r/r
+  revenue_support: 0.15          # Przychody r/r (nie tylko cost cutting)
+  value: 0.10                    # P/E
+
+wymagane_kolumny:
+  - Ticker
+  - ROE_YY
+  - ROA_YY
+  - P_E
+
+# Parametry scoringu - sweet spoty
+scoring:
+  # Profitability Momentum
+  roe_yy_sweet_min: 30
+  roe_yy_sweet_max: 80
+  roe_yy_suspicious: 300
+  
+  roa_yy_sweet_min: 25
+  roa_yy_sweet_max: 70
+  roa_yy_suspicious: 120
+  
+  # Margin Momentum
+  margin_op_sweet_min: 15
+  margin_op_sweet_max: 60
+  margin_op_suspicious: 120
+  
+  margin_net_sweet_min: 20
+  margin_net_sweet_max: 80
+  margin_net_suspicious: 150
+  
+  # Revenue Support
+  rev_sweet_min: 10
+  rev_sweet_max: 40
+  rev_suspicious: 150
+  
+  # Value
+  pe_sweet_min: 4
+  pe_sweet_max: 12
+
+flagi:
+  Q:
+    nazwa: "Quality Momentum"
+    warunek: "ROE r/r 30-100% i ROA r/r 20-80%"
+  M:
+    nazwa: "Margin Expansion"
+    warunek: "Marża Op r/r > 30% i Marża Netto r/r > 30%"
+  A:
+    nazwa: "Acceleration"
+    warunek: "k/k > r/r dla min. 2 metryk"
+  R:
+    nazwa: "Revenue Support"
+    warunek: "Przychody r/r > 15%"
+  V:
+    nazwa: "Value"
+    warunek: "P/E 4-12"
+  "!":
+    nazwa: "Warning - Extreme"
+    warunek: "Którykolwiek wskaźnik r/r > 500%"
+  "?":
+    nazwa: "Verify - Deceleration"
+    warunek: "r/r > 50% ale k/k < 0"

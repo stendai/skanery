@@ -2,7 +2,7 @@
 
 ## Status projektu
 
-**Wersja:** 1.1  
+**Wersja:** 1.2  
 **Ostatnia aktualizacja:** 2025-12-15
 
 ---
@@ -59,7 +59,37 @@
 
 ---
 
-## 🔨 Do zrobienia (v1.2)
+## ✅ Zrobione (v1.2)
+
+### Nowy model
+- [x] **Quality Momentum** - stabilna poprawa wyników (nie jednorazowe skoki)
+  - [x] config.yaml
+  - [x] model.py
+  - [x] README.md
+  - [x] Dane: biznesradar_qm.txt
+
+### Filozofia modelu
+- Sweet spot scoring - najwyższy score dla umiarkowanych wzrostów (30-80% r/r)
+- Kara za ekstremalne skoki (+500%) - często jednorazowe/z niskiej bazy
+- Trend confirmation - k/k musi potwierdzać r/r
+- 5 komponentów: Profitability Momentum, Margin Momentum, Trend Confirmation, Revenue Support, Value
+
+### Aktualizacje base.py
+- [x] Mapowanie nagłówków dla Quality Momentum:
+  - `Marża zysku operacyjnego k/k` → `Margin_Op_QQ`
+  - `Marża zysku operacyjnego r/r` → `Margin_Op_YY`
+  - `Marża zysku netto k/k` → `Margin_Net_QQ`
+  - `Marża zysku netto r/r` → `Margin_Net_YY`
+  - `Przychody ze sprzedaży kwart r/r` → `Rev_YY`
+- [x] Dodanie nowych kolumn do konwersji procentowych
+
+### Dokumentacja
+- [x] Aktualizacja głównego README.md
+- [x] Aktualizacja TODO.md
+
+---
+
+## 🔨 Do zrobienia (v1.3)
 
 ### Wysoki priorytet
 
@@ -165,9 +195,29 @@
 - Czytelność w Excel
 - Ale mamy też `Flags_List` jako listę do filtrowania w kodzie
 
+### Dlaczego Quality Momentum karze ekstremalne wzrosty?
+- Wzrost +1000% r/r to często:
+  - Niska baza (rok temu ROE 0.5%, teraz 5%)
+  - Jednorazowy event (sprzedaż aktywów)
+  - Mean reversion - wróci do normy
+- Wzrost 30-80% r/r to często:
+  - Systematyczna poprawa biznesu
+  - Powtarzalny trend
+  - Mniejsze ryzyko
+
 ---
 
 ## 🔖 Changelog
+
+### v1.2 (2025-12-15)
+- **NOWY MODEL:** Quality Momentum
+  - Stabilna poprawa wyników (sweet spot 30-80% r/r)
+  - Kara za ekstremalne skoki (+500%)
+  - Trend confirmation (k/k vs r/r)
+  - 5 komponentów: Profitability, Margin, Trend, Revenue, Value
+  - Flagi: [Q], [M], [A], [R], [V], [!], [?]
+- Aktualizacja base.py o nowe mapowania nagłówków
+- Aktualizacja dokumentacji
 
 ### v1.1 (2025-12-15)
 - **NOWY MODEL:** Cash Quality & Balance Sheet
