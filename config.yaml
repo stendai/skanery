@@ -1,0 +1,27 @@
+# GPW Screener - Globalna konfiguracja
+
+# Ścieżki
+paths:
+  dane: "dane"
+  skanery: "skanery"
+  wyniki: "main"
+  archive: "main/archive"
+  logs: "logs"
+
+# Ustawienia wyników
+output:
+  timestamp_format: "%Y-%m-%d_%H%M"
+  keep_archive_days: 30
+  excel_filename: "wyniki_modelow"
+
+# Ustawienia logowania
+logging:
+  level: "INFO"
+  format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+  file_enabled: true
+
+# Ustawienia scoringu
+scoring:
+  normalize: true          # Normalizuj score do 0-100
+  min_score: 0
+  max_score: 100

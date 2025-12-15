@@ -1,0 +1,46 @@
+2025-12-15 09:24:22 [INFO] gpw_screener: ============================================================
+2025-12-15 09:24:22 [INFO] gpw_screener: GPW SCREENER - Uruchamiam modele
+2025-12-15 09:24:22 [INFO] gpw_screener: ============================================================
+2025-12-15 09:24:22 [INFO] gpw_screener: Znaleziono 3 aktywnych skanerów
+
+2025-12-15 09:24:22 [INFO] gpw_screener: 📊 Quality Growth...
+2025-12-15 09:24:22 [INFO] gpw_screener:    ✅ Przetworzono 37 spółek
+2025-12-15 09:24:22 [INFO] gpw_screener: 📊 Revenue Momentum & Safety...
+2025-12-15 09:24:22 [INFO] gpw_screener:    ✅ Przetworzono 57 spółek
+2025-12-15 09:24:22 [INFO] gpw_screener: 📊 Turnaround...
+2025-12-15 09:24:22 [INFO] gpw_screener:    ✅ Przetworzono 37 spółek
+2025-12-15 09:24:22 [INFO] gpw_screener: ✅ Zapisano: C:\Users\noguriscan\skanery2\main\wyniki_2025-12-15_0924.xlsx
+2025-12-15 09:24:22 [INFO] gpw_screener: ✅ Latest: C:\Users\noguriscan\skanery2\main\wyniki_latest.xlsx
+2025-12-15 09:24:22 [INFO] gpw_screener: 
+======================================================================
+2025-12-15 09:24:22 [INFO] gpw_screener: PODSUMOWANIE - TOP 5
+2025-12-15 09:24:22 [INFO] gpw_screener: ======================================================================
+2025-12-15 09:24:22 [INFO] gpw_screener: 
+📈 Quality Growth
+2025-12-15 09:24:22 [INFO] gpw_screener: --------------------------------------------------
+2025-12-15 09:24:22 [INFO] gpw_screener:     1. MND      [Q][G][R]      Score: 100.0
+2025-12-15 09:24:22 [INFO] gpw_screener:     2. BLO      [Q][G][V][R]   Score: 96.6
+2025-12-15 09:24:22 [INFO] gpw_screener:     3. 7FT      [Q][G][V][R]   Score: 94.0
+2025-12-15 09:24:22 [INFO] gpw_screener:     4. MLB      [G][V]         Score: 93.4
+2025-12-15 09:24:22 [INFO] gpw_screener:     5. QNT      [Q][V]         Score: 91.4
+2025-12-15 09:24:22 [INFO] gpw_screener: 
+📈 Revenue Momentum & Safety
+2025-12-15 09:24:22 [INFO] gpw_screener: --------------------------------------------------
+2025-12-15 09:24:22 [INFO] gpw_screener:     1. LSI      [M][S][G]      Score: 100.0
+2025-12-15 09:24:22 [INFO] gpw_screener:     2. MLB      [M][S][G][A]   Score: 99.1
+2025-12-15 09:24:22 [INFO] gpw_screener:     3. QNT      [M][S][G][A]   Score: 98.0
+2025-12-15 09:24:22 [INFO] gpw_screener:     4. 7FT      [M][G][A]      Score: 97.7
+2025-12-15 09:24:22 [INFO] gpw_screener:     5. QRS      [M][Q][G][A]   Score: 94.3
+2025-12-15 09:24:22 [INFO] gpw_screener: 
+📈 Turnaround
+2025-12-15 09:24:22 [INFO] gpw_screener: --------------------------------------------------
+2025-12-15 09:24:22 [INFO] gpw_screener:     1. PNT      [S]            Score: 100.0
+2025-12-15 09:24:22 [INFO] gpw_screener:     2. INK      [S]            Score: 94.4
+2025-12-15 09:24:22 [INFO] gpw_screener:     3. INP                     Score: 87.4
+2025-12-15 09:24:22 [INFO] gpw_screener:     4. MVP      [D][S]         Score: 81.7
+2025-12-15 09:24:22 [INFO] gpw_screener:     5. BLT      [T]            Score: 76.2
+2025-12-15 09:24:22 [INFO] gpw_screener: 
+======================================================================
+2025-12-15 09:24:22 [INFO] gpw_screener: ✅ Gotowe!
+2025-12-15 09:24:22 [INFO] gpw_screener: ======================================================================
+

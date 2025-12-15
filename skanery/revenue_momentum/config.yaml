@@ -1,0 +1,45 @@
+# Revenue Momentum & Safety - Konfiguracja modelu
+
+nazwa: "Revenue Momentum & Safety"
+opis: "GARP + Momentum + Bezpieczeństwo finansowe"
+aktywny: true
+
+dane: "biznesradar_rms.txt"
+
+wagi:
+  momentum: 0.25      # Dynamika przychodów
+  quality: 0.25       # ROE + ROA + Marża
+  safety: 0.20        # Zadłużenie + Pokrycie
+  value: 0.20         # P/E + PEG
+  consistency: 0.10   # Spójność wzrostu
+
+wymagane_kolumny:
+  - Ticker
+  - ROE
+  - ROA
+  - Rev_QQ
+  - Rev_O4K
+  - P_E
+
+flagi:
+  M:
+    nazwa: "Momentum"
+    warunek: "Rev QQ > 20% i Rev O4K > 15%"
+  Q:
+    nazwa: "Quality"
+    warunek: "ROE > 20% i OpMargin > 15%"
+  S:
+    nazwa: "Safe"
+    warunek: "Debt < 0.35 i Coverage > 1.5"
+  G:
+    nazwa: "GARP"
+    warunek: "PEG < 1.0"
+  A:
+    nazwa: "Acceleration"
+    warunek: "Rev QQ > O4K > 3Y"
+  "!":
+    nazwa: "Warning"
+    warunek: "Debt > 0.6"
+  "?":
+    nazwa: "Verify"
+    warunek: "Rev QQ > 100%"

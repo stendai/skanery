@@ -1,0 +1,66 @@
+# Quality Growth - Konfiguracja modelu
+
+nazwa: "Quality Growth"
+opis: "Spółki z powtarzalnym wzrostem zysków operacyjnych"
+aktywny: true
+
+# Plik danych (względem folderu dane/)
+dane: "biznesradar_qg.txt"
+
+# Wagi komponentów (muszą sumować się do 1.0)
+wagi:
+  quality: 0.30      # Jakość biznesu (ROE + ROA)
+  growth: 0.25       # Wzrost EBIT 3Y
+  rev_confirm: 0.15  # Potwierdzenie wzrostem przychodów
+  value: 0.20        # Wycena (P/E, P/EBIT)
+  pbv_sanity: 0.10   # Kontrola P/BV (unikanie pułapek)
+
+# Wymagane kolumny w danych
+wymagane_kolumny:
+  - Ticker
+  - ROE
+  - ROA
+  - EBIT_3Y
+  - Rev_3Y
+  - P_E
+  - P_BV
+
+# Parametry scoringu
+scoring:
+  # Quality
+  roe_max: 25        # ROE przy którym score = 100
+  roa_max: 15        # ROA przy którym score = 100
+  
+  # Growth  
+  ebit_sweet_spot_min: 30   # EBIT 3Y - dolna granica sweet spot
+  ebit_sweet_spot_max: 50   # EBIT 3Y - górna granica sweet spot
+  ebit_suspicious: 100      # EBIT 3Y powyżej którego kara (jednorazowy?)
+  
+  # Value
+  pe_sweet_spot_min: 5
+  pe_sweet_spot_max: 12
+  
+  # P/BV
+  pbv_value_trap: 0.5       # Poniżej = ryzyko value trap
+  pbv_healthy_max: 2.0      # Zdrowa wycena
+
+# Definicje flag
+flagi:
+  Q: 
+    nazwa: "High Quality"
+    warunek: "ROE > 25%"
+  G:
+    nazwa: "Healthy Growth"
+    warunek: "EBIT 3Y 30-80%"
+  V:
+    nazwa: "Good Value"
+    warunek: "P/E 5-10"
+  R:
+    nazwa: "Revenue Growth"
+    warunek: "Rev 3Y > 15%"
+  "!":
+    nazwa: "Value Trap Risk"
+    warunek: "P/BV < 0.6"
+  "?":
+    nazwa: "Verify Growth"
+    warunek: "EBIT 3Y > 100%"
