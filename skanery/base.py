@@ -90,6 +90,26 @@ def map_header(h: str) -> str:
     if 'przychody' in h_lower and 'kwart' in h_lower and 'r/r' in h_lower:
         return 'Rev_YY'
     
+    # === MAPOWANIA DLA VALUATION COMPRESSION ===
+    
+    # Cena / Wartość księgowa k/k -> P_BV_QQ (PRZED ogólnym P_BV!)
+    if 'cena' in h_lower and 'ksi' in h_lower and 'k/k' in h_lower:
+        return 'P_BV_QQ'
+    # Cena / Wartość księgowa r/r -> P_BV_YY
+    if 'cena' in h_lower and 'ksi' in h_lower and 'r/r' in h_lower:
+        return 'P_BV_YY'
+    
+    # Cena / Zysk k/k -> P_E_QQ (PRZED ogólnym P_E!)
+    if 'cena' in h_lower and 'zysk' in h_lower and 'k/k' in h_lower and 'operacyj' not in h_lower:
+        return 'P_E_QQ'
+    # Cena / Zysk r/r -> P_E_YY
+    if 'cena' in h_lower and 'zysk' in h_lower and 'r/r' in h_lower and 'operacyj' not in h_lower:
+        return 'P_E_YY'
+    
+    # EV / EBITDA -> EV_EBITDA
+    if 'ev' in h_lower and 'ebitda' in h_lower:
+        return 'EV_EBITDA'
+    
     # === STARE MAPOWANIA (dla innych modeli) ===
     
     # Starsze mapowanie marży (bez netto/operacyjna distinction)
@@ -160,7 +180,7 @@ def load_data(filepath: str) -> Optional[pd.DataFrame]:
         if not line:
             continue
         
-        if 'Profil' in line and ('ROE' in line or 'Cena' in line or 'ROA' in line):
+        if 'Profil' in line and ('ROE' in line or 'Cena' in line or 'ROA' in line or 'EV' in line):
             if header_line is None:
                 header_line = line
             continue
@@ -210,16 +230,20 @@ def load_data(filepath: str) -> Optional[pd.DataFrame]:
                     'Margin_QQ', 'Margin_YY', 'EBIT_3Y', 'Rev_3Y',
                     'Rev_QQ', 'Rev_O4K', 'OpMargin',
                     'Cash_Conv',
-                    # Nowe dla Quality Momentum
+                    # Quality Momentum
                     'Margin_Op_QQ', 'Margin_Op_YY', 'Margin_Net_QQ', 'Margin_Net_YY',
-                    'Rev_YY']
+                    'Rev_YY',
+                    # Valuation Compression
+                    'P_BV_QQ', 'P_BV_YY', 'P_E_QQ', 'P_E_YY']
     for col in percent_cols:
         if col in df.columns:
             df[col] = df[col].apply(parse_percent)
     
     # Konwersja kolumn numerycznych
     numeric_cols = ['P_EBIT', 'P_E', 'P_BV', 'Debt_Ratio', 'Asset_Coverage',
-                    'Coverage_I', 'Current_Ratio']
+                    'Coverage_I', 'Current_Ratio',
+                    # Valuation Compression
+                    'EV_EBITDA']
     for col in numeric_cols:
         if col in df.columns:
             df[col] = df[col].apply(lambda x: parse_percent(x) if pd.notna(x) else 0)

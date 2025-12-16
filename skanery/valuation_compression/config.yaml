@@ -1,0 +1,61 @@
+# Valuation Compression - Konfiguracja modelu
+
+nazwa: "Valuation Compression"
+opis: "Spółki ze spadającą wyceną przy rosnących zyskach - potencjalne re-rating"
+aktywny: true
+
+dane: "biznesradar_vc.txt"
+
+wagi:
+  pe_compression: 0.30      # Kompresja P/E (r/r)
+  pbv_compression: 0.25     # Kompresja P/BV (r/r)
+  trend_confirmation: 0.20  # k/k potwierdza r/r
+  absolute_value: 0.15      # Aktualna wycena (P/BV, EV/EBITDA)
+  safety_check: 0.10        # Unikanie ekstremalnych przypadków
+
+wymagane_kolumny:
+  - Ticker
+  - P_E_YY
+  - P_BV_YY
+  - P_BV
+
+# Parametry scoringu - sweet spoty
+scoring:
+  # P/E Compression (spadek = dobrze)
+  pe_yy_sweet_min: -60      # Najlepszy spadek P/E r/r
+  pe_yy_sweet_max: -20      # Minimalny spadek dla sweet spot
+  pe_yy_suspicious: -95     # Poniżej = podejrzane (kryzys?)
+  
+  # P/BV Compression
+  pbv_yy_sweet_min: -35     # Najlepszy spadek P/BV r/r
+  pbv_yy_sweet_max: -10     # Minimalny spadek dla sweet spot
+  pbv_yy_suspicious: -60    # Poniżej = podejrzane
+  
+  # Absolute Value
+  pbv_excellent: 1.0        # P/BV < 1 = poniżej wartości księgowej
+  pbv_good: 2.0             # P/BV < 2 = rozsądna wycena
+  ev_ebitda_excellent: 5.0  # EV/EBITDA < 5 = tania
+  ev_ebitda_good: 8.0       # EV/EBITDA < 8 = OK
+
+flagi:
+  C:
+    nazwa: "Compression"
+    warunek: "P/E r/r < -30% i P/BV r/r < -15%"
+  V:
+    nazwa: "Value"
+    warunek: "P/BV < 1.0 lub EV/EBITDA < 5"
+  A:
+    nazwa: "Acceleration"
+    warunek: "k/k < r/r (kompresja przyspiesza)"
+  D:
+    nazwa: "Deep Compression"
+    warunek: "P/E r/r < -50% i P/BV r/r < -25%"
+  T:
+    nazwa: "Trend Confirmed"
+    warunek: "k/k i r/r oba negatywne dla P/E i P/BV"
+  "!":
+    nazwa: "Warning - Extreme"
+    warunek: "P/E r/r < -90% lub P/BV r/r < -50%"
+  "?":
+    nazwa: "Verify - Rising"
+    warunek: "P/E r/r > 0 (wycena rośnie)"

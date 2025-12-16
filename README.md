@@ -24,7 +24,8 @@ gpw_screener/
 │   ├── biznesradar_qg.txt # Dane dla Quality Growth / Turnaround
 │   ├── biznesradar_rms.txt # Dane dla Revenue Momentum
 │   ├── biznesradar_cq.txt # Dane dla Cash Quality
-│   └── biznesradar_qm.txt # Dane dla Quality Momentum
+│   ├── biznesradar_qm.txt # Dane dla Quality Momentum
+│   └── biznesradar_vc.txt # Dane dla Valuation Compression
 │
 ├── skanery/               # Modele screeningowe
 │   ├── base.py            # Bazowa klasa + funkcje wspólne
@@ -35,7 +36,8 @@ gpw_screener/
 │   ├── turnaround/        # Model Turnaround
 │   ├── revenue_momentum/  # Model Revenue Momentum
 │   ├── cash_quality/      # Model Cash Quality & Balance Sheet
-│   └── quality_momentum/  # Model Quality Momentum
+│   ├── quality_momentum/  # Model Quality Momentum
+│   └── valuation_compression/ # Model Valuation Compression
 │
 ├── main/                  # Wyniki
 │   ├── wyniki_latest.xlsx # Najnowsze wyniki
@@ -54,6 +56,7 @@ gpw_screener/
 | **Revenue Momentum** | Momentum + Bezpieczeństwo + GARP | O'Neil, Piotroski |
 | **Cash Quality** | Jakość zysków + solidny bilans | Piotroski, Accrual Anomaly |
 | **Quality Momentum** | Stabilna poprawa wyników (nie jednorazowe skoki) | Momentum Factor, Mean Reversion |
+| **Valuation Compression** | Spadająca wycena przy rosnących zyskach | Mean Reversion, PEG Logic |
 
 ## Użycie
 
@@ -166,6 +169,11 @@ Dane pobierane z BiznesRadar.pl - skopiuj tabelę (Ctrl+C) i wklej do pliku .txt
 - Marża zysku netto k/k, r/r
 - Cena/Zysk
 
+**Valuation Compression:**
+- Cena/Wartość księgowa k/k, r/r
+- Cena/Zysk k/k, r/r
+- EV/EBITDA
+
 ## Wyniki
 
 Wyniki zapisywane są w `main/`:
@@ -181,6 +189,7 @@ Wyniki zapisywane są w `main/`:
 4. **Revenue Momentum** - pełne wyniki modelu
 5. **Cash Quality** - pełne wyniki modelu
 6. **Quality Momentum** - pełne wyniki modelu
+7. **Valuation Compression** - pełne wyniki modelu
 
 ### Kolorowanie
 
@@ -195,17 +204,18 @@ Każdy model definiuje własne flagi sygnalizujące kluczowe cechy:
 |-------|-----------|--------|
 | `[Q]` | High Quality / Quality Momentum | QG, TA, CQ, QM |
 | `[G]` | Growth | QG, RM |
-| `[V]` | Value | QG, RM, CQ, QM |
+| `[V]` | Value | QG, RM, CQ, QM, VC |
 | `[M]` | Momentum / Margin Expansion | RM, QM |
 | `[S]` | Safe | RM, TA |
-| `[D]` | Deep Value | TA |
-| `[A]` | Acceleration | RM, QM |
+| `[D]` | Deep Value / Deep Compression | TA, VC |
+| `[A]` | Acceleration | RM, QM, VC |
 | `[R]` | Revenue Support | QG, QM |
-| `[C]` | Cash King | CQ |
+| `[C]` | Cash King / Compression | CQ, VC |
 | `[B]` | Strong Balance | CQ |
 | `[L]` | Liquid | CQ |
-| `[!]` | Warning | RM, CQ, QM |
-| `[?]` | Verify | QG, RM, CQ, QM |
+| `[T]` | Turnaround / Trend Confirmed | TA, VC |
+| `[!]` | Warning | RM, CQ, QM, VC |
+| `[?]` | Verify | QG, RM, CQ, QM, VC |
 
 ## Wymagania
 

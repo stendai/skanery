@@ -2,8 +2,8 @@
 
 ## Status projektu
 
-**Wersja:** 1.2  
-**Ostatnia aktualizacja:** 2025-12-15
+**Wersja:** 1.3  
+**Ostatnia aktualizacja:** 2025-12-16
 
 ---
 
@@ -89,7 +89,38 @@
 
 ---
 
-## 🔨 Do zrobienia (v1.3)
+## ✅ Zrobione (v1.3)
+
+### Nowy model
+- [x] **Valuation Compression** - spółki ze spadającą wyceną przy rosnących zyskach
+  - [x] config.yaml
+  - [x] model.py
+  - [x] README.md
+  - [x] Dane: biznesradar_vc.txt
+
+### Filozofia modelu
+- Szukamy kompresji wyceny (P/E i P/BV spadają r/r)
+- Sweet spot: P/E r/r -20% do -60%, P/BV r/r -10% do -35%
+- Kara za ekstremalne spadki (< -80%) - może być kryzys
+- Trend confirmation - k/k potwierdza r/r
+- 5 komponentów: P/E Compression, P/BV Compression, Trend Confirmation, Absolute Value, Safety Check
+
+### Aktualizacje base.py
+- [x] Mapowanie nagłówków dla Valuation Compression:
+  - `Cena / Wartość księgowa k/k` → `P_BV_QQ`
+  - `Cena / Wartość księgowa r/r` → `P_BV_YY`
+  - `Cena / Zysk k/k` → `P_E_QQ`
+  - `Cena / Zysk r/r` → `P_E_YY`
+  - `EV / EBITDA` → `EV_EBITDA`
+- [x] Dodanie nowych kolumn do konwersji (procentowe + numeryczne)
+
+### Dokumentacja
+- [x] Aktualizacja głównego README.md
+- [x] Aktualizacja TODO.md
+
+---
+
+## 🔨 Do zrobienia (v1.4)
 
 ### Wysoki priorytet
 
@@ -205,9 +236,29 @@
   - Powtarzalny trend
   - Mniejsze ryzyko
 
+### Dlaczego Valuation Compression szuka spadających wycen?
+- Spadek P/E r/r może oznaczać:
+  - ✅ Zyski rosną szybciej niż cena → undervalued
+  - ❌ Cena spada bo biznes się pogarsza → value trap
+- Dlatego łączymy z:
+  - Trend confirmation (k/k potwierdza)
+  - Absolute value (P/BV, EV/EBITDA)
+  - Safety check (filtr ekstremalnych)
+
 ---
 
 ## 🔖 Changelog
+
+### v1.3 (2025-12-16)
+- **NOWY MODEL:** Valuation Compression
+  - Kompresja wyceny (P/E i P/BV spadają r/r)
+  - Sweet spot: P/E r/r -20% do -60%, P/BV r/r -10% do -35%
+  - Kara za ekstremalne spadki (możliwy kryzys)
+  - Trend confirmation (k/k vs r/r)
+  - 5 komponentów: P/E Comp, P/BV Comp, Trend, Absolute Value, Safety
+  - Flagi: [C], [V], [A], [D], [T], [!], [?]
+- Aktualizacja base.py o nowe mapowania nagłówków
+- Aktualizacja dokumentacji
 
 ### v1.2 (2025-12-15)
 - **NOWY MODEL:** Quality Momentum
@@ -236,3 +287,18 @@
 - Logging
 - Archiwizacja
 - Consensus
+
+---
+
+## 📊 Podsumowanie modeli (v1.3)
+
+| Model | Dane | Komponenty | Flagi |
+|-------|------|------------|-------|
+| Quality Growth | biznesradar_qg.txt | Quality, Growth, RevConfirm, Value, PBV | [Q][G][V][R][!][?] |
+| Turnaround | biznesradar_qg.txt | Value, Quality, Contrarian, DeepValue | [D][Q][T][S] |
+| Revenue Momentum | biznesradar_rms.txt | Momentum, Quality, Safety, Value, Consistency | [M][Q][S][G][A][!][?] |
+| Cash Quality | biznesradar_cq.txt | CashQuality, Balance, Profitability, Value | [C][B][Q][V][L][!][?] |
+| Quality Momentum | biznesradar_qm.txt | ProfitMom, MarginMom, Trend, Revenue, Value | [Q][M][A][R][V][!][?] |
+| Valuation Compression | biznesradar_vc.txt | PE_Comp, PBV_Comp, Trend, AbsValue, Safety | [C][V][A][D][T][!][?] |
+
+**Łącznie: 6 modeli aktywnych**
