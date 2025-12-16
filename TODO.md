@@ -2,12 +2,12 @@
 
 ## Status projektu
 
-**Wersja:** 1.3  
+**Wersja:** 2.0  
 **Ostatnia aktualizacja:** 2025-12-16
 
 ---
 
-## ✅ Zrobione (v1.0)
+## ✅ Zrobione (v1.0 - v1.3)
 
 ### Struktura
 - [x] Modularna struktura - każdy model w osobnym folderze
@@ -16,289 +16,231 @@
 - [x] README.md z dokumentacją per model
 - [x] Główny README.md projektu
 
-### Modele
+### Modele (6 aktywnych)
 - [x] **Quality Growth** - wzrost EBIT, jakość biznesu (Buffett/Lynch)
 - [x] **Turnaround** - deep value, contrarian (Graham)
 - [x] **Revenue Momentum & Safety** - GARP + Piotroski + CANSLIM
+- [x] **Cash Quality & Balance Sheet** - jakość zysków + solidny bilans
+- [x] **Quality Momentum** - stabilna poprawa wyników
+- [x] **Valuation Compression** - spadająca wycena przy rosnących zyskach
 
-### Funkcjonalności
-- [x] `run.py` - uruchamia wszystkie skanery
+### Funkcjonalności run.py
+- [x] Autodiscovery skanerów
 - [x] `run.py --list` - lista skanerów
 - [x] `run.py --only X Y` - wybrane skanery
-- [x] Autodiscovery skanerów
 - [x] Timestamp w nazwach plików wyników
-- [x] Archiwizacja starych wyników (`main/archive/`)
+- [x] Archiwizacja starych wyników
 - [x] `wyniki_latest.xlsx` - zawsze najnowsze
 - [x] Logging do pliku i konsoli
 - [x] Walidacja wymaganych kolumn
 - [x] Normalizacja score do 0-100
-- [x] Flagi jako lista (do filtrowania programowego)
-- [x] `app.py --consensus` - spółki wysoko we wszystkich modelach
+- [x] Flagi jako lista i string
 
 ---
 
-## ✅ Zrobione (v1.1)
+## ✅ Zrobione (v2.0) - Signal Aggregation
 
-### Nowy model
-- [x] **Cash Quality & Balance Sheet** - jakość zysków (cash conversion) + solidny bilans
-  - [x] config.yaml
-  - [x] model.py
-  - [x] README.md
-  - [x] Dane: biznesradar_cq.txt
+### Nowy app.py - kompletna przebudowa
+- [x] **Signal Aggregation** - agregacja sygnałów z wielu modeli
+- [x] **Investment Thesis** - automatyczne generowanie tezy inwestycyjnej
+- [x] **Consensus Ranking** - ranking oparty na Signal Strength
+- [x] **Flag Heatmap** - macierz spółek vs flag
+- [x] **Best Of** - TOP 3 w każdej kategorii
+- [x] **Profiles** - szczegółowe profile spółek
 
-### Aktualizacje base.py
-- [x] Mapowanie nagłówków dla Cash Quality:
-  - `Udział zysku netto w przepływach operacyjnych r/r` → `Cash_Conv`
-  - `I stopień pokrycia` → `Coverage_I`
-  - `Płynność bieżąca` → `Current_Ratio`
-- [x] Dodanie nowych kolumn do konwersji (procentowe/numeryczne)
+### Metryki Signal Aggregation
+- [x] **Signal Strength** - główna metryka (combo wszystkich)
+- [x] **Coverage** - w ilu modelach występuje
+- [x] **Elite Score** - punkty za TOP5/TOP10/TOP20
+- [x] **Flag Density** - średnia flag na model
+- [x] **Warning Count** - liczba ostrzeżeń
+- [x] **Category Strength** - siła w kategoriach (Quality, Value, etc.)
+
+### Komendy app.py
+- [x] `python app.py` - generuje wyniki_ostateczne.xlsx
+- [x] `python app.py --top N` - TOP N w konsoli
+- [x] `python app.py --ticker XYZ` - profil spółki
+- [x] `python app.py --status` - status systemu
+- [x] `python app.py --no-save` - bez zapisu
+
+### Kategoryzacja flag
+- [x] Quality: [Q]
+- [x] Growth: [G], [R]
+- [x] Value: [V], [D]
+- [x] Momentum: [M], [A]
+- [x] Safety: [S], [B], [L]
+- [x] Cash: [C]
+- [x] Turnaround: [T]
+- [x] Warning: [!], [?]
 
 ### Dokumentacja
-- [x] Aktualizacja głównego README.md
+- [x] Aktualizacja README.md
 - [x] Aktualizacja TODO.md
 
 ---
 
-## ✅ Zrobione (v1.2)
-
-### Nowy model
-- [x] **Quality Momentum** - stabilna poprawa wyników (nie jednorazowe skoki)
-  - [x] config.yaml
-  - [x] model.py
-  - [x] README.md
-  - [x] Dane: biznesradar_qm.txt
-
-### Filozofia modelu
-- Sweet spot scoring - najwyższy score dla umiarkowanych wzrostów (30-80% r/r)
-- Kara za ekstremalne skoki (+500%) - często jednorazowe/z niskiej bazy
-- Trend confirmation - k/k musi potwierdzać r/r
-- 5 komponentów: Profitability Momentum, Margin Momentum, Trend Confirmation, Revenue Support, Value
-
-### Aktualizacje base.py
-- [x] Mapowanie nagłówków dla Quality Momentum:
-  - `Marża zysku operacyjnego k/k` → `Margin_Op_QQ`
-  - `Marża zysku operacyjnego r/r` → `Margin_Op_YY`
-  - `Marża zysku netto k/k` → `Margin_Net_QQ`
-  - `Marża zysku netto r/r` → `Margin_Net_YY`
-  - `Przychody ze sprzedaży kwart r/r` → `Rev_YY`
-- [x] Dodanie nowych kolumn do konwersji procentowych
-
-### Dokumentacja
-- [x] Aktualizacja głównego README.md
-- [x] Aktualizacja TODO.md
-
----
-
-## ✅ Zrobione (v1.3)
-
-### Nowy model
-- [x] **Valuation Compression** - spółki ze spadającą wyceną przy rosnących zyskach
-  - [x] config.yaml
-  - [x] model.py
-  - [x] README.md
-  - [x] Dane: biznesradar_vc.txt
-
-### Filozofia modelu
-- Szukamy kompresji wyceny (P/E i P/BV spadają r/r)
-- Sweet spot: P/E r/r -20% do -60%, P/BV r/r -10% do -35%
-- Kara za ekstremalne spadki (< -80%) - może być kryzys
-- Trend confirmation - k/k potwierdza r/r
-- 5 komponentów: P/E Compression, P/BV Compression, Trend Confirmation, Absolute Value, Safety Check
-
-### Aktualizacje base.py
-- [x] Mapowanie nagłówków dla Valuation Compression:
-  - `Cena / Wartość księgowa k/k` → `P_BV_QQ`
-  - `Cena / Wartość księgowa r/r` → `P_BV_YY`
-  - `Cena / Zysk k/k` → `P_E_QQ`
-  - `Cena / Zysk r/r` → `P_E_YY`
-  - `EV / EBITDA` → `EV_EBITDA`
-- [x] Dodanie nowych kolumn do konwersji (procentowe + numeryczne)
-
-### Dokumentacja
-- [x] Aktualizacja głównego README.md
-- [x] Aktualizacja TODO.md
-
----
-
-## 🔨 Do zrobienia (v1.4)
+## 🔨 Do zrobienia (v2.1)
 
 ### Wysoki priorytet
 
-#### Testy
-- [ ] Folder `tests/`
-- [ ] Test: czy model się odpala na przykładowych danych
-- [ ] Test: czy score jest w zakresie 0-100
-- [ ] Test: czy wymagane kolumny są w outputcie
-- [ ] Test: czy flagi się generują poprawnie
-- [ ] Przykładowe dane testowe (mały plik ~10 spółek)
+#### Portfolio Health Check
+- [ ] `python app.py --check AAA BBB CCC` - sprawdź pozycje portfela
+- [ ] Ostrzeżenie gdy spółka poza TOP50
+- [ ] Porównanie z poprzednim snapshoteм
 
-#### Cache danych
-- [ ] Cache sparsowanych danych (pickle/parquet)
-- [ ] Sprawdzanie czy dane się zmieniły (hash pliku)
-- [ ] Opcja `--no-cache` w run.py
+#### Filtrowanie
+- [ ] `python app.py --rynek GPW` - tylko główny parkiet
+- [ ] `python app.py --min-coverage 3` - minimum 3 modele
+- [ ] `python app.py --no-warnings` - bez spółek z [!][?]
+
+#### Eksport
+- [ ] Eksport consensus do CSV
+- [ ] Eksport do Markdown (do notatek)
 
 ### Średni priorytet
 
+#### Testy
+- [ ] Folder `tests/`
+- [ ] Test: czy model się odpala
+- [ ] Test: czy score w zakresie 0-100
+- [ ] Test: czy Signal Strength się liczy poprawnie
+- [ ] Przykładowe dane testowe
+
+#### Cache danych
+- [ ] Cache sparsowanych danych (pickle/parquet)
+- [ ] Sprawdzanie czy dane się zmieniły (hash)
+- [ ] Opcja `--no-cache`
+
 #### Nowe modele
-- [ ] **Dividend** - spółki dywidendowe (DY, payout ratio, stabilność)
-- [ ] **Momentum Price** - momentum cenowe (52w high, RSI proxy)
+- [ ] **Dividend** - spółki dywidendowe
+- [ ] **Momentum Price** - momentum cenowe
 - [ ] **Small Cap Growth** - małe spółki z potencjałem
-- [ ] **Piotroski F-Score** - pełna implementacja 9 kryteriów
-
-#### Historia i tracking
-- [ ] Śledzenie zmian rankingu w czasie
-- [ ] Alerty: "spółka X wskoczyła do TOP 10"
-- [ ] Alerty: "spółka Y wypadła z TOP 10"
-- [ ] Wykres historii rankingu dla spółki
-
-#### Meta-scoring / Consensus
-- [ ] Weighted consensus (różne wagi dla różnych modeli)
-- [ ] Percentyle zamiast rankingu
-- [ ] "Confidence score" - ile modeli się zgadza
+- [ ] **Piotroski F-Score** - pełna implementacja
 
 ### Niski priorytet
 
-#### Pakiet Python
-- [ ] `setup.py` / `pyproject.toml`
-- [ ] Instalacja przez `pip install -e .`
-- [ ] Usunięcie `sys.path.insert` hacków
+#### Historia i tracking
+- [ ] `python app.py --portfolio` - zapisz snapshot TOP10
+- [ ] `python app.py --performance` - porównaj z historią
+- [ ] Alerty: "spółka X wskoczyła do TOP 10"
+- [ ] Wykres historii rankingu
 
-#### Wizualizacja (app.py)
-- [ ] Heatmapa: spółki vs modele
+#### Wizualizacja
+- [ ] Heatmapa graficzna (matplotlib/plotly)
 - [ ] Wykres radarowy dla spółki
 - [ ] Eksport do HTML
 - [ ] Eksport do PDF
 
-#### Integracje
-- [ ] Automatyczne pobieranie danych z BiznesRadar (scraping)
-- [ ] API do odpytywania wyników
-- [ ] Webhook/notyfikacje (Telegram, email)
+#### Pakiet Python
+- [ ] `setup.py` / `pyproject.toml`
+- [ ] Instalacja przez `pip install -e .`
 
 ---
 
 ## 💡 Pomysły na przyszłość
 
-### Nowe źródła danych
-- Stooq.pl
-- GPW API
-- Yahoo Finance (dla porównania z zagranicznymi)
+### Integracje
+- [ ] Automatyczne pobieranie danych z BiznesRadar (scraping)
+- [ ] Śledzenie ESPI (pozytywne zaskoczenia)
+- [ ] Webhook/notyfikacje (Telegram)
 
 ### Machine Learning
-- Predykcja które spółki z TOP 10 faktycznie urosną
-- Backtesting modeli na danych historycznych
-- Optymalizacja wag automatycznie
+- [ ] Predykcja które spółki z TOP 10 faktycznie urosną
+- [ ] Backtesting modeli na danych historycznych
+- [ ] Optymalizacja wag automatycznie
 
 ### UI
-- Prosta aplikacja webowa (Streamlit/Gradio)
-- Dashboard z wykresami
-- Filtrowanie interaktywne
+- [ ] Prosta aplikacja webowa (Streamlit)
+- [ ] Dashboard z wykresami
+- [ ] Filtrowanie interaktywne
 
 ---
 
 ## 🐛 Znane problemy
 
-1. **Encoding danych** - pliki z BiznesRadar mają różne kodowanie (UTF-8 vs Windows-1250). Parser radzi sobie, ale może być kruchy.
-
-2. **Brak P/EBIT w dane_2** - model Revenue Momentum nie ma tej kolumny, używa tylko P/E.
-
-3. **Hardcoded thresholds** - progi scoringu (np. ROE > 25%) są zahardcodowane w model.py, powinny być w config.yaml.
+1. **Encoding danych** - pliki z BiznesRadar mają różne kodowanie
+2. **MODEL_THEMES zawiera 7 wpisów** - ale mamy 6 modeli (jeden wpis to skrócona nazwa)
+3. **Skrócona nazwa arkusza** - "Cash Quality & Balance She" zamiast pełnej
 
 ---
 
 ## 📝 Decyzje projektowe
 
-### Dlaczego YAML a nie JSON dla configów?
-- Czytelniejszy dla człowieka
-- Komentarze
-- Multiline strings
+### Dlaczego Signal Aggregation zamiast prostego średniego rankingu?
 
-### Dlaczego normalizacja 0-100?
-- Porównywalność między modelami
-- Intuicyjne ("score 85" vs "score 67.3")
-- Consensus łatwiejszy do obliczenia
+Prosty średni ranking:
+- Spółka #1 w 1 modelu, #50 w 5 innych = średnia #41
+- Nie łapie "specialist" spółek
 
-### Dlaczego osobne pliki danych per "typ" skanera?
-- BiznesRadar ma różne skanery z różnymi kolumnami
-- Quality Growth potrzebuje innych danych niż Revenue Momentum
-- Łatwiejsze zarządzanie
+Signal Aggregation:
+- Punkty za TOP5 (5pkt), TOP10 (3pkt), TOP20 (1pkt)
+- Spółka #1 w 1 modelu = 5pkt, nawet jeśli gdzie indziej nie występuje
+- Łapie zarówno "broad appeal" jak i "specialist" spółki
 
-### Dlaczego flagi jako string "[Q][G][V]" a nie lista?
-- Czytelność w Excel
-- Ale mamy też `Flags_List` jako listę do filtrowania w kodzie
+### Dlaczego Investment Thesis?
 
-### Dlaczego Quality Momentum karze ekstremalne wzrosty?
-- Wzrost +1000% r/r to często:
-  - Niska baza (rok temu ROE 0.5%, teraz 5%)
-  - Jednorazowy event (sprzedaż aktywów)
-  - Mean reversion - wróci do normy
-- Wzrost 30-80% r/r to często:
-  - Systematyczna poprawa biznesu
-  - Powtarzalny trend
-  - Mniejsze ryzyko
+- Szybka orientacja co model widzi w spółce
+- Automatyczne podsumowanie bez czytania wszystkich szczegółów
+- Kategoryzacja (QUALITY, VALUE, MOMENTUM, etc.) ułatwia porównania
 
-### Dlaczego Valuation Compression szuka spadających wycen?
-- Spadek P/E r/r może oznaczać:
-  - ✅ Zyski rosną szybciej niż cena → undervalued
-  - ❌ Cena spada bo biznes się pogarsza → value trap
-- Dlatego łączymy z:
-  - Trend confirmation (k/k potwierdza)
-  - Absolute value (P/BV, EV/EBITDA)
-  - Safety check (filtr ekstremalnych)
+### Dlaczego Category Strength?
+
+- Spółka może mieć wiele flag [Q][Q][Q] w różnych modelach
+- To silniejszy sygnał jakości niż jedna [Q]
+- Wagi kategorii (quality: 1.5, safety: 1.4, etc.) odzwierciedlają preferencje
+
+---
+
+## 📊 Podsumowanie modeli (v2.0)
+
+| Model | Dane | Główne flagi | Cel |
+|-------|------|--------------|-----|
+| Quality Growth | biznesradar_qg.txt | [Q][G][R] | Wzrost EBIT |
+| Turnaround | biznesradar_qg.txt | [D][T][S] | Deep value |
+| Revenue Momentum | biznesradar_rms.txt | [M][S][G][A] | GARP + Safety |
+| Cash Quality | biznesradar_cq.txt | [C][B][L][Q] | Jakość zysków |
+| Quality Momentum | biznesradar_qm.txt | [Q][M][A][R] | Stabilna poprawa |
+| Valuation Compression | biznesradar_vc.txt | [C][V][D][T] | Kompresja wyceny |
+
+**Łącznie: 6 modeli aktywnych**
 
 ---
 
 ## 🔖 Changelog
 
-### v1.3 (2025-12-16)
-- **NOWY MODEL:** Valuation Compression
-  - Kompresja wyceny (P/E i P/BV spadają r/r)
-  - Sweet spot: P/E r/r -20% do -60%, P/BV r/r -10% do -35%
-  - Kara za ekstremalne spadki (możliwy kryzys)
-  - Trend confirmation (k/k vs r/r)
-  - 5 komponentów: P/E Comp, P/BV Comp, Trend, Absolute Value, Safety
-  - Flagi: [C], [V], [A], [D], [T], [!], [?]
-- Aktualizacja base.py o nowe mapowania nagłówków
+### v2.0 (2025-12-16)
+- **NOWY APP.PY:** Kompletna przebudowa z Signal Aggregation
+  - Consensus ranking oparty na Signal Strength
+  - Automatyczne Investment Thesis
+  - Flag Heatmap
+  - Best Of w kategoriach
+  - Profile spółek
+- Komendy: `--top N`, `--ticker XYZ`, `--status`, `--no-save`
+- Kategoryzacja flag (Quality, Value, Momentum, Safety, etc.)
+- Wagi kategorii dla thesis clarity
+- wyniki_ostateczne.xlsx z 4 arkuszami
 - Aktualizacja dokumentacji
+
+### v1.3 (2025-12-16)
+- Model: Valuation Compression
 
 ### v1.2 (2025-12-15)
-- **NOWY MODEL:** Quality Momentum
-  - Stabilna poprawa wyników (sweet spot 30-80% r/r)
-  - Kara za ekstremalne skoki (+500%)
-  - Trend confirmation (k/k vs r/r)
-  - 5 komponentów: Profitability, Margin, Trend, Revenue, Value
-  - Flagi: [Q], [M], [A], [R], [V], [!], [?]
-- Aktualizacja base.py o nowe mapowania nagłówków
-- Aktualizacja dokumentacji
+- Model: Quality Momentum
 
 ### v1.1 (2025-12-15)
-- **NOWY MODEL:** Cash Quality & Balance Sheet
-  - Jakość zysków (cash conversion)
-  - Solidność bilansu (zadłużenie, płynność, pokrycie)
-  - Rentowność (ROE, ROA, marża)
-  - Wycena (P/E)
-- Aktualizacja base.py o nowe mapowania nagłówków
-- Aktualizacja dokumentacji
+- Model: Cash Quality & Balance Sheet
 
 ### v1.0 (2025-12-15)
 - Pierwsza wersja
 - 3 modele: Quality Growth, Turnaround, Revenue Momentum
 - Modularna struktura
-- Config YAML
-- Logging
-- Archiwizacja
-- Consensus
+- app.py --consensus (stara wersja)
 
 ---
 
-## 📊 Podsumowanie modeli (v1.3)
+## 🎯 Następne kroki (sugerowane)
 
-| Model | Dane | Komponenty | Flagi |
-|-------|------|------------|-------|
-| Quality Growth | biznesradar_qg.txt | Quality, Growth, RevConfirm, Value, PBV | [Q][G][V][R][!][?] |
-| Turnaround | biznesradar_qg.txt | Value, Quality, Contrarian, DeepValue | [D][Q][T][S] |
-| Revenue Momentum | biznesradar_rms.txt | Momentum, Quality, Safety, Value, Consistency | [M][Q][S][G][A][!][?] |
-| Cash Quality | biznesradar_cq.txt | CashQuality, Balance, Profitability, Value | [C][B][Q][V][L][!][?] |
-| Quality Momentum | biznesradar_qm.txt | ProfitMom, MarginMom, Trend, Revenue, Value | [Q][M][A][R][V][!][?] |
-| Valuation Compression | biznesradar_vc.txt | PE_Comp, PBV_Comp, Trend, AbsValue, Safety | [C][V][A][D][T][!][?] |
-
-**Łącznie: 6 modeli aktywnych**
+1. **Teraz:** Przetestuj app.py na swoich danych
+2. **Ten tydzień:** Dodaj `--check` dla portfolio health
+3. **Ten miesiąc:** Dodaj filtrowanie `--rynek GPW`
+4. **Q1 2026:** Dodaj tracking historii i performance
